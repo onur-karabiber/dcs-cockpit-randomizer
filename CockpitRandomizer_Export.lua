@@ -1,8 +1,8 @@
 -- =============================================================================
--- CockpitRandomizer v3.1
+-- CockpitRandomizer v1.1  (2024-06-15)
 -- F-4E Phantom II | Pilot seat
 --
--- Author  : Onur Karabiber
+-- Author  : Onur "Pathé" Karabiber
 -- File    : Saved Games\DCS\Scripts\CockpitRandomizer_Export.lua
 --
 -- PURPOSE:
