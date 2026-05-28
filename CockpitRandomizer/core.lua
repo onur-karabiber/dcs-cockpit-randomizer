@@ -17,11 +17,12 @@ CR.RPM_THRESHOLD  = 10.0   -- Both engines must be below this % RPM for cold-sta
 -- SWITCH REGISTRY  (populated by aircraft modules at load time)
 -- =============================================================================
 CR.AIRCRAFT = {}
--- Each entry: { aircraft = "NAME", switches = { ... } }
--- Registered via CR.register(aircraft_name, switches_table)
+-- Each entry: { switches = {...}, delay = <seconds or nil> }
+-- Registered via CR.register(aircraft_name, switches_table, optional_delay)
+-- optional_delay overrides CR.DELAY_SECONDS for that aircraft only.
 
-function CR.register(aircraft_name, switches)
-    CR.AIRCRAFT[aircraft_name] = switches
+function CR.register(aircraft_name, switches, delay)
+    CR.AIRCRAFT[aircraft_name] = { switches = switches, delay = delay }
 end
 
 -- =============================================================================
@@ -69,8 +70,8 @@ local function cr_randomize()
         return
     end
 
-    local switches = CR.AIRCRAFT[ac]
-    if not switches then
+    local entry = CR.AIRCRAFT[ac]
+    if not entry then
         cr_log("Skipping: no switch table registered for '" .. ac .. "'.")
         return
     end
@@ -82,7 +83,7 @@ local function cr_randomize()
 
     cr_log("Randomizing cockpit on: " .. ac)
 
-    for _, sw in ipairs(switches) do
+    for _, sw in ipairs(entry.switches) do
         local ok2, device = pcall(GetDevice, sw.dev)
         if ok2 and device then
             local pick = sw.vals[math.random(#sw.vals)]
@@ -133,10 +134,12 @@ function LuaExportActivityNextEvent(t)
         if not CR._armed then
             local ac = cr_get_aircraft()
             if ac and ac ~= "" then
+                local entry = CR.AIRCRAFT[ac]
+                local delay = (entry and entry.delay) or CR.DELAY_SECONDS
                 CR._armed    = true
-                CR._arm_time = t + CR.DELAY_SECONDS
+                CR._arm_time = t + delay
                 cr_log("Aircraft detected: " .. ac ..
-                       " — arming with " .. CR.DELAY_SECONDS .. "s delay.")
+                       " — arming with " .. delay .. "s delay.")
             end
         end
 
