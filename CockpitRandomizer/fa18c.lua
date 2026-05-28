@@ -238,4 +238,6 @@ CR.register("FA-18C_hornet", {
     -- Defog Handle  (movable axis, -1 to 1; visual only)
     -- Sampled symmetrically around center
     { dev=8,  cmd=3005, vals={-1,-0.5,0,0.5,1.0},      label="Defog Handle" },
-})
+}, 10.0)
+-- Note: FA-18C requires a longer delay (10s) because the avionics
+-- initialization sequence resets switches after the cockpit loads.
