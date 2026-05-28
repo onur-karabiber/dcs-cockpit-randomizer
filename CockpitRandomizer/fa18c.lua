@@ -146,4 +146,4 @@ CR.register("FA-18C_hornet", {
 
     { dev=11, cmd=3016, vals={-1,-0.5,0,0.5,1.0},       label="Defog Handle" },
 
-}, 10.0)
+}, 3.1)

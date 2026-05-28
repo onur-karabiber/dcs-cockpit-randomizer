@@ -183,5 +183,5 @@ CR.register("F-14B", {
     -- -------------------------------------------------------------------------
     { dev=13, cmd=3002, vals={0,1},                     label="Hydraulic Transfer Pump Switch Cover" },
 
-}, 10.0)
+}, 3.1)
 -- Note: F-14B uses a 10s delay to allow avionics initialization to complete.
