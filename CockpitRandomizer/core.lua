@@ -87,15 +87,28 @@ local function cr_randomize()
         local ok2, device = pcall(GetDevice, sw.dev)
         if ok2 and device then
             local pick = sw.vals[math.random(#sw.vals)]
-            local ok3 = pcall(function()
-                device:performClickableAction(sw.cmd, pick)
-            end)
-            if ok3 then
-                cr_log(string.format("  %-40s dev=%-3d cmd=%-5d -> %s",
-                    sw.label, sw.dev, sw.cmd, tostring(pick)))
+            local ok3, err3
+            if sw.arg then
+                -- Axis / knob control: use set_argument_value(arg, value)
+                ok3, err3 = pcall(function()
+                    device:set_argument_value(sw.arg, pick)
+                end)
             else
-                cr_log(string.format("  FAIL: %-40s dev=%d cmd=%d",
-                    sw.label, sw.dev, sw.cmd))
+                -- Switch / button control: use performClickableAction(cmd, value)
+                ok3, err3 = pcall(function()
+                    device:performClickableAction(sw.cmd, pick)
+                end)
+            end
+            if ok3 then
+                cr_log(string.format("  %-40s dev=%-3d %s -> %s",
+                    sw.label, sw.dev,
+                    sw.arg and ("arg="..sw.arg) or ("cmd="..sw.cmd),
+                    tostring(pick)))
+            else
+                cr_log(string.format("  FAIL: %-40s dev=%d %s | %s",
+                    sw.label, sw.dev,
+                    sw.arg and ("arg="..sw.arg) or ("cmd="..sw.cmd),
+                    tostring(err3)))
             end
         else
             cr_log(string.format("  GetDevice(%d) failed: %s", sw.dev, sw.label))
