@@ -1,0 +1,153 @@
+-- =============================================================================
+-- CockpitRandomizer — core.lua
+-- Shared engine: aircraft detection, RPM guard, hook chaining, logging.
+-- Aircraft-specific switch tables live in separate files (f4e.lua, fa18c.lua…).
+-- =============================================================================
+
+local CR = {}
+
+-- =============================================================================
+-- SETTINGS
+-- =============================================================================
+CR.ENABLED        = true
+CR.DELAY_SECONDS  = 3.0
+CR.RPM_THRESHOLD  = 10.0   -- Both engines must be below this % RPM for cold-start
+
+-- =============================================================================
+-- SWITCH REGISTRY  (populated by aircraft modules at load time)
+-- =============================================================================
+CR.AIRCRAFT = {}
+-- Each entry: { aircraft = "NAME", switches = { ... } }
+-- Registered via CR.register(aircraft_name, switches_table)
+
+function CR.register(aircraft_name, switches)
+    CR.AIRCRAFT[aircraft_name] = switches
+end
+
+-- =============================================================================
+-- INTERNAL STATE
+-- =============================================================================
+CR._fired    = false
+CR._arm_time = nil
+CR._armed    = false
+
+-- =============================================================================
+-- HELPERS
+-- =============================================================================
+local function cr_log(msg)
+    log.write("COCKPIT_RANDOMIZER", log.INFO, msg)
+end
+
+local function cr_get_aircraft()
+    local ok, data = pcall(LoGetSelfData)
+    if ok and data and data.Name then return data.Name end
+    return nil
+end
+
+-- Returns true only when both engines are below RPM_THRESHOLD.
+-- Fails safe (returns false) if LoGetEngineInfo is unavailable.
+local function cr_is_cold_start()
+    local ok, eng = pcall(LoGetEngineInfo)
+    if not ok or not eng or not eng.RPM then
+        cr_log("RPM check: LoGetEngineInfo unavailable — skipping randomizer.")
+        return false
+    end
+    local rpm_l = eng.RPM.left  or 0
+    local rpm_r = eng.RPM.right or 0
+    cr_log(string.format("RPM check: left=%.1f%%  right=%.1f%%  threshold=%.1f%%",
+        rpm_l, rpm_r, CR.RPM_THRESHOLD))
+    return (rpm_l < CR.RPM_THRESHOLD) and (rpm_r < CR.RPM_THRESHOLD)
+end
+
+local function cr_randomize()
+    math.randomseed(os.time())
+    for _ = 1, math.random(5, 20) do math.random() end
+
+    local ac = cr_get_aircraft()
+    if not ac then
+        cr_log("Skipping: could not identify aircraft.")
+        return
+    end
+
+    local switches = CR.AIRCRAFT[ac]
+    if not switches then
+        cr_log("Skipping: no switch table registered for '" .. ac .. "'.")
+        return
+    end
+
+    if not cr_is_cold_start() then
+        cr_log("Skipping: engines running (RPM >= threshold). Not a cold start.")
+        return
+    end
+
+    cr_log("Randomizing cockpit on: " .. ac)
+
+    for _, sw in ipairs(switches) do
+        local ok2, device = pcall(GetDevice, sw.dev)
+        if ok2 and device then
+            local pick = sw.vals[math.random(#sw.vals)]
+            local ok3 = pcall(function()
+                device:performClickableAction(sw.cmd, pick)
+            end)
+            if ok3 then
+                cr_log(string.format("  %-40s dev=%-3d cmd=%-5d -> %s",
+                    sw.label, sw.dev, sw.cmd, tostring(pick)))
+            else
+                cr_log(string.format("  FAIL: %-40s dev=%d cmd=%d",
+                    sw.label, sw.dev, sw.cmd))
+            end
+        else
+            cr_log(string.format("  GetDevice(%d) failed: %s", sw.dev, sw.label))
+        end
+    end
+
+    cr_log("Randomizer complete for: " .. ac)
+end
+
+-- =============================================================================
+-- EXPORT HOOKS
+-- Chains into any existing LuaExport* functions already in Export.lua.
+-- Safe alongside DCS-BIOS, SRS, Tacview, and similar tools.
+-- =============================================================================
+local _prev_start = LuaExportStart
+function LuaExportStart()
+    CR._fired    = false
+    CR._armed    = false
+    CR._arm_time = nil
+    if _prev_start then _prev_start() end
+end
+
+local _prev_stop = LuaExportStop
+function LuaExportStop()
+    CR._fired    = false
+    CR._armed    = false
+    CR._arm_time = nil
+    if _prev_stop then _prev_stop() end
+end
+
+local _prev_next = LuaExportActivityNextEvent
+function LuaExportActivityNextEvent(t)
+    local next_call = t + 0.1
+
+    if CR.ENABLED and not CR._fired then
+        if not CR._armed then
+            local ac = cr_get_aircraft()
+            if ac and ac ~= "" then
+                CR._armed    = true
+                CR._arm_time = t + CR.DELAY_SECONDS
+                cr_log("Aircraft detected: " .. ac ..
+                       " — arming with " .. CR.DELAY_SECONDS .. "s delay.")
+            end
+        end
+
+        if CR._armed and t >= CR._arm_time then
+            CR._fired = true
+            cr_randomize()
+        end
+    end
+
+    if _prev_next then return _prev_next(t) end
+    return next_call
+end
+
+return CR
