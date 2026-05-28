@@ -21,9 +21,9 @@ CR.register("FA-18C_hornet", {
     -- OXYGEN SYSTEM   dev=7 (OXYGEN_INTERFACE)
     -- -------------------------------------------------------------------------
 
-    -- OXY Flow Knob  (axis, 0–1)
+    -- OXY Flow Knob  (axis, arg=366)
     -- No fixed default; sampled at 5 steps
-    { dev=7,  cmd=3002, vals={0,0.25,0.5,0.75,1.0},   label="OXY Flow Knob" },
+    { dev=7,  arg=366, vals={0,0.25,0.5,0.75,1.0},    label="OXY Flow Knob" },
 
     -- OBOGS Control Switch, ON/OFF
     -- 0 = OFF (default / lower), 1 = ON
@@ -33,18 +33,18 @@ CR.register("FA-18C_hornet", {
     -- INTERCOM   dev=28 (INTERCOM)
     -- -------------------------------------------------------------------------
 
-    -- TACAN Volume Control Knob  (axis, 0–1)
-    { dev=28, cmd=3008, vals={0,0.25,0.5,0.75,1.0},   label="TACAN Volume Knob" },
+    -- TACAN Volume Control Knob  (axis, arg=363)
+    { dev=28, arg=363, vals={0,0.25,0.5,0.75,1.0},    label="TACAN Volume Knob" },
 
     -- -------------------------------------------------------------------------
     -- EXTERIOR LIGHTS   dev=26 (EXT_LIGHTS)
     -- -------------------------------------------------------------------------
 
-    -- POSITION Lights Dimmer Control  (axis, 0–1)
-    { dev=26, cmd=3001, vals={0,0.25,0.5,0.75,1.0},   label="POSITION Lights Dimmer" },
+    -- POSITION Lights Dimmer Control  (axis, arg=338)
+    { dev=26, arg=338, vals={0,0.25,0.5,0.75,1.0},    label="POSITION Lights Dimmer" },
 
-    -- FORMATION Lights Dimmer Control  (axis, 0–1)
-    { dev=26, cmd=3002, vals={0,0.25,0.5,0.75,1.0},   label="FORMATION Lights Dimmer" },
+    -- FORMATION Lights Dimmer Control  (axis, arg=337)
+    { dev=26, arg=337, vals={0,0.25,0.5,0.75,1.0},    label="FORMATION Lights Dimmer" },
 
     -- LDG/TAXI LIGHT Switch, ON/OFF
     -- 0 = OFF (default / lower), 1 = ON
@@ -58,25 +58,25 @@ CR.register("FA-18C_hornet", {
     -- 0 = CARRIER (default / lower), 1 = FIELD (upper)
     { dev=27, cmd=3009, vals={0,1},                    label="HOOK BYPASS Switch" },
 
-    -- CONSOLES Lights Dimmer Control  (axis, 0–1; default = 0 / fully CCW)
-    { dev=27, cmd=3001, vals={0,0.25,0.5,0.75,1.0},   label="CONSOLES Dimmer" },
+    -- CONSOLES Lights Dimmer Control  (axis, arg=413; default = 0 / fully CCW)
+    { dev=27, arg=413, vals={0,0.25,0.5,0.75,1.0},   label="CONSOLES Dimmer" },
 
-    -- INST PNL Dimmer Control  (axis, 0–1; default = 0 / fully CCW)
-    { dev=27, cmd=3002, vals={0,0.25,0.5,0.75,1.0},   label="INST PNL Dimmer" },
+    -- INST PNL Dimmer Control  (axis, arg=414; default = 0 / fully CCW)
+    { dev=27, arg=414, vals={0,0.25,0.5,0.75,1.0},   label="INST PNL Dimmer" },
 
-    -- FLOOD Light Dimmer Control  (axis, 0–1; default = 0 / fully CCW)
-    { dev=27, cmd=3003, vals={0,0.25,0.5,0.75,1.0},   label="FLOOD Dimmer" },
+    -- FLOOD Light Dimmer Control  (axis, arg=415; default = 0 / fully CCW)
+    { dev=27, arg=415, vals={0,0.25,0.5,0.75,1.0},   label="FLOOD Dimmer" },
 
     -- MODE Switch, NVG/NITE/DAY  (3-position)
     -- 0 = NVG (upper), 0.5 = NITE (middle), 1 = DAY (default / lower)
     -- DAY appears twice → 40% probability of staying at default
     { dev=27, cmd=3004, vals={0,0.5,1.0,1.0},         label="MODE Switch" },
 
-    -- WARN/CAUTION Dimmer Control  (axis, 0–1)
-    { dev=27, cmd=3006, vals={0,0.25,0.5,0.75,1.0},   label="WARN/CAUTION Dimmer" },
+    -- WARN/CAUTION Dimmer Control  (axis, arg=417)
+    { dev=27, arg=417, vals={0,0.25,0.5,0.75,1.0},   label="WARN/CAUTION Dimmer" },
 
-    -- CHART Light Dimmer Control  (axis, 0–1; default = 0 / fully CCW)
-    { dev=27, cmd=3005, vals={0,0.25,0.5,0.75,1.0},   label="CHART Dimmer" },
+    -- CHART Light Dimmer Control  (axis, arg=418; default = 0 / fully CCW)
+    { dev=27, arg=418, vals={0,0.25,0.5,0.75,1.0},   label="CHART Dimmer" },
 
     -- -------------------------------------------------------------------------
     -- LANDING GEAR   dev=5 (GEAR_INTERFACE)
@@ -104,11 +104,11 @@ CR.register("FA-18C_hornet", {
     -- UFC   dev=12 (UFC)
     -- -------------------------------------------------------------------------
 
-    -- UFC COMM 1 Volume Control Knob  (axis, 0–1)
-    { dev=12, cmd=3030, vals={0,0.25,0.5,0.75,1.0},   label="UFC COMM 1 Volume" },
+    -- UFC COMM 1 Volume Control Knob  (axis, arg=108)
+    { dev=12, arg=108, vals={0,0.25,0.5,0.75,1.0},   label="UFC COMM 1 Volume" },
 
-    -- UFC COMM 2 Volume Control Knob  (axis, 0–1)
-    { dev=12, cmd=3031, vals={0,0.25,0.5,0.75,1.0},   label="UFC COMM 2 Volume" },
+    -- UFC COMM 2 Volume Control Knob  (axis, arg=123)
+    { dev=12, arg=123, vals={0,0.25,0.5,0.75,1.0},   label="UFC COMM 2 Volume" },
 
     -- -------------------------------------------------------------------------
     -- MDI LEFT   dev=14 (MDI_LEFT)
@@ -130,8 +130,8 @@ CR.register("FA-18C_hornet", {
     -- AMPCD   dev=16 (AMPCD)
     -- -------------------------------------------------------------------------
 
-    -- AMPCD Off/Brightness Control Knob  (axis, 0–1; default = 0 / OFF)
-    { dev=16, cmd=3001, vals={0,0,0.25,0.5,0.75,1.0}, label="AMPCD Off/Brightness Knob" },
+    -- AMPCD Off/Brightness Control Knob  (axis, arg=203; default = 0 / OFF)
+    { dev=16, arg=203, vals={0,0,0.25,0.5,0.75,1.0}, label="AMPCD Off/Brightness Knob" },
 
     -- -------------------------------------------------------------------------
     -- WEAPONS   dev=18 (SMS)
@@ -235,9 +235,9 @@ CR.register("FA-18C_hornet", {
     -- ECS   dev=8 (ECS_INTERFACE)
     -- -------------------------------------------------------------------------
 
-    -- Defog Handle  (movable axis, -1 to 1; visual only)
+    -- Defog Handle  (movable axis, arg=451; range -1 to 1; visual only)
     -- Sampled symmetrically around center
-    { dev=8,  cmd=3005, vals={-1,-0.5,0,0.5,1.0},      label="Defog Handle" },
+    { dev=8,  arg=451, vals={-1,-0.5,0,0.5,1.0},      label="Defog Handle" },
 }, 10.0)
 -- Note: FA-18C requires a longer delay (10s) because the avionics
 -- initialization sequence resets switches after the cockpit loads.
