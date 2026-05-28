@@ -4,7 +4,7 @@
 -- Aircraft-specific switch tables live in separate files (f4e.lua, fa18c.lua…).
 -- =============================================================================
 
-local CR = {}
+CR = {}  -- global: aircraft modules access this without require()
 
 -- =============================================================================
 -- SETTINGS
@@ -150,4 +150,4 @@ function LuaExportActivityNextEvent(t)
     return next_call
 end
 
-return CR
+-- core.lua loaded. CR is now a global table available to f4e.lua, fa18c.lua, etc.
