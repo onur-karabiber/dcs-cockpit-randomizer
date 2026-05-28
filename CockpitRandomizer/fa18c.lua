@@ -13,7 +13,7 @@
 --   - Controls marked "visual only" are not yet simulated in DCS.
 -- =============================================================================
 
-local CR = require("CockpitRandomizer.core")
+-- Relies on CR global table loaded by core.lua via Export.lua dofile chain.
 
 CR.register("FA-18C_hornet", {
 
