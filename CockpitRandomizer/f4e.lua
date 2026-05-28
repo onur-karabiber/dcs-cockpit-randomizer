@@ -8,7 +8,7 @@
 -- Values: derived from clickabledata.lua widget types
 -- =============================================================================
 
-local CR = require("CockpitRandomizer.core")
+-- Relies on CR global table loaded by core.lua via Export.lua dofile chain.
 
 CR.register("F-4E-45MC", {
 
