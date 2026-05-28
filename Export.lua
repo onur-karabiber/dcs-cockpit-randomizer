@@ -17,6 +17,7 @@ local cr_status, cr_err = pcall(function()
     dofile(base .. "core.lua")
     dofile(base .. "f4e.lua")
     dofile(base .. "fa18c.lua")
+    dofile(base .. "f14b.lua")
 end)
 if not cr_status then
     log.write("COCKPIT_RANDOMIZER", log.ERROR, "Load failed: " .. tostring(cr_err))
