@@ -1,49 +1,113 @@
-# CockpitRandomizer
+## Who is this for?
 
-A DCS World Export script that randomizes cockpit switch positions each time
-you sit down for a **cold start**, forcing you to perform a proper interior
-check before doing anything else.
+This mod is **not for everyone**.
 
-Currently supports:
+CockpitRandomizer is built for DCS players who enjoy:
 
-- **F-4E Phantom II** (Heatblur) — 40 controls
-- **F/A-18C Hornet** (Eagle Dynamics) — 36 controls
-- **F-14B Tomcat** (Heatblur) — 30 controls
-- **F-16C Viper** (Eagle Dynamics) — 52 controls
-- **F-5E Tiger II** (Eagle Dynamics) — 57 controls
+- Real cold-start procedures
+- Checklists
+- Interior checks
+- Proper switch discipline
+- Realistic cockpit workflow
+- Catching something out of place before startup
+
+If you are the type of player who spawns, hits auto-start, and takes off in 30 seconds, this mod is probably not for you.
+
+If you enjoy real procedures, checklists, and doing things properly, this mod is for you.
 
 ---
 
 ## Why this exists
 
-In DCS, every time you occupy a cockpit the aircraft spawns with all switches
-in their factory-default positions. For taxi, runway hold, and in-flight slots
-this makes sense. For cold-start scenarios it breaks immersion: a real aircraft
-coming out of a previous sortie would have been left in whatever state the last
-crew left it in. Landing lights on, STAB AUG engaged, IFF in an unexpected
-mode — anything is possible.
+In vanilla DCS, cold starts become predictable.
 
-CockpitRandomizer recreates that reality. Each cold start is different. You
-cannot skip the interior check.
+Every time you enter the cockpit, the aircraft appears in the exact same state. Same switches. Same knobs. Same panel positions.
+
+After a while, interior checks stop being checks.
+
+You stop **checking** and start **remembering**.
+
+After enough repetitions, you already know where everything is before even looking. The checklist becomes memory instead of verification.
+
+That breaks immersion.
+
+A real aircraft coming from a previous sortie would rarely be left in a perfectly standardized state. A previous pilot, crew chief, or technician may have left things differently:
+
+- A light dimmer slightly moved
+- A radio volume changed
+- A formation light setting altered
+- A non-critical system left in an unexpected position
+- A switch not exactly where you expected
+
+CockpitRandomizer brings some of that uncertainty back.
+
+---
+
+## How the randomization works
+
+The goal is believable randomization.
+
+This is **not chaos mode**.
+
+Safety-critical or operationally important switches are intentionally biased toward their normal/default cold-start position.
+
+A switch's default state usually has somewhere between **75% and 95% probability** of appearing.
+
+In other words:
+
+- Most of the time, the cockpit will look familiar
+- Occasionally, something important will be different
+- Interior checks become necessary again
+
+You cannot fully trust memory anymore.
+
+That is the whole point.
+
+Meanwhile, non-critical cockpit elements such as:
+
+- Interior lighting
+- Brightness knobs
+- Radio volume controls
+- Miscellaneous cockpit comfort settings
+
+are often randomized more freely.
+
+The result is a cockpit that feels less predictable and more believable.
 
 ---
 
 ## Features
 
-- **Cold-start only**: the script reads both engine RPM values via
-  `LoGetEngineInfo()`. If either engine is at or above 10% RPM the script
-  silently does nothing. Taxi, runway, and in-flight slots are unaffected.
-- **Multi-aircraft**: a shared core engine detects the active aircraft and
-  applies the correct switch table automatically. No configuration needed when
-  switching between modules.
-- **Modular file structure**: each aircraft lives in its own file. Adding a new
-  module means adding one file without touching anything else.
-- **Non-destructive**: chains into any existing `LuaExport*` functions.
-  Compatible with DCS-BIOS, SRS, Tacview, and similar Export.lua-based tools.
-- **Weighted probabilities**: safety-critical switches (Master Arm, Arm Fuze,
-  Generators) are more likely to remain in safe/normal positions, but not
-  guaranteed.
-- All activity is logged to `DCS.log` under the `COCKPIT_RANDOMIZER` tag.
+- **Cold-start only**  
+  The script checks engine RPM values and only activates when the aircraft is truly cold. Taxi, runway, hot-start, and in-flight slots are unaffected.
+
+- **Aircraft-aware**  
+  Automatically detects the active aircraft and loads the correct switch table.
+
+- **Weighted randomization**  
+  Safety-critical systems heavily favor realistic defaults instead of pure randomness.
+
+- **Designed for procedural flying**  
+  Adds uncertainty without turning startup into chaos.
+
+- **Modular structure**  
+  Each aircraft uses its own switch table file, making expansion straightforward.
+
+- **Export.lua friendly**  
+  Compatible with DCS-BIOS, SRS, Tacview, and other Export.lua-based tools.
+
+- **Logging support**  
+  All activity is written to `DCS.log` under the `COCKPIT_RANDOMIZER` tag.
+
+---
+
+## Important note
+
+CockpitRandomizer does **not** simulate failures, maintenance issues, or broken aircraft.
+
+The goal is not to sabotage your startup.
+
+The goal is simply to recreate the small inconsistencies that naturally happen in a real cockpit and restore the value of a proper interior check.
 
 ---
 
