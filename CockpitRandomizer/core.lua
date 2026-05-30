@@ -20,6 +20,13 @@ CR.AIRCRAFT = {}
 -- Each entry: { switches = {...}, delay = <seconds or nil> }
 -- Registered via CR.register(aircraft_name, switches_table, optional_delay)
 -- optional_delay overrides CR.DELAY_SECONDS for that aircraft only.
+--
+-- Switch table entries support two forms:
+--   Standard:  { label="..", dev=N, cmd=N, vals={...} }
+--   Multi-cmd: { label="..", dev=N, run=function(device) ... end }
+-- When sw.run is present, it is called directly and sw.vals/sw.cmd are ignored.
+-- sw.run receives the device object; it may call performClickableAction
+-- multiple times or perform any other device interaction.
 
 function CR.register(aircraft_name, switches, delay)
     CR.AIRCRAFT[aircraft_name] = { switches = switches, delay = delay }
@@ -88,16 +95,27 @@ local function cr_randomize()
     for _, sw in ipairs(entry.switches) do
         local ok2, device = pcall(GetDevice, sw.dev)
         if ok2 and device then
-            local pick = sw.vals[math.random(#sw.vals)]
+            -- sw.run: multi-command path (custom function, no vals/cmd needed).
+            -- sw.vals: standard single-command path.
+            local pick
             local ok3, err3 = pcall(function()
-                device:performClickableAction(sw.cmd, pick)
+                if sw.run then
+                    sw.run(device)
+                else
+                    pick = sw.vals[math.random(#sw.vals)]
+                    device:performClickableAction(sw.cmd, pick)
+                end
             end)
             if ok3 then
-                cr_log(string.format("  %-40s dev=%-3d cmd=%-5d -> %s",
-                    sw.label, sw.dev, sw.cmd, tostring(pick)))
+                cr_log(string.format("  %-40s dev=%-3d cmd=%-5s -> %s",
+                    sw.label, sw.dev,
+                    sw.run and "multi" or tostring(sw.cmd),
+                    sw.run and "<custom>"  or tostring(pick)))
             else
-                cr_log(string.format("  FAIL: %-40s dev=%d cmd=%d | %s",
-                    sw.label, sw.dev, sw.cmd, tostring(err3)))
+                cr_log(string.format("  FAIL: %-40s dev=%d cmd=%s | %s",
+                    sw.label, sw.dev,
+                    sw.run and "multi" or tostring(sw.cmd),
+                    tostring(err3)))
             end
         else
             cr_log(string.format("  GetDevice(%d) failed: %s", sw.dev, sw.label))

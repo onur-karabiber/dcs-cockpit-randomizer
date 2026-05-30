@@ -101,10 +101,11 @@ CR.register("F-16C_50", {
     --   TankInertingSw=3007, AirRefuelSw=3008
     -- =========================================================================
 
-    -- FUEL MASTER Switch Cover | default_red_cover | arg 558 | arg_lim={0,1}
-    -- Cold start: CLOSE (arg=0). val=0 → stay CLOSE. val=+1 → OPEN.
-    -- CLOSE=stay (chance: 90%) / OPEN=+1 (chance: 10%)
-    { dev=4,  cmd=3002, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                       label="Fuel Master Switch Cover" },
+    -- FUEL MASTER Switch Cover | default_red_cover | arg=558
+    -- FuelMasterSwCvr = 3002  cold=CLOSE(arg=0) / OPEN=+1
+    -- Switch (FuelMasterSw) is sim-controlled and cannot be randomized.
+    -- CLOSE=stay (90%) / OPEN=+1 (10%)
+    { dev=4, cmd=3002, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},   label="FUEL MASTER Switch Cover" },
 
     -- ENGINE FEED Knob | multiposition_switch, count=4, delta=0.1 | arg 556 | arg_lim={0,0.3}
     -- Cold start: NORM (arg=0.1). val=0 → stay NORM.
@@ -201,7 +202,6 @@ CR.register("F-16C_50", {
     -- Cold start: NORM (arg=0.1). val=0 → stay NORM.
     -- val=-0.1 → OFF. val=+0.1 → DUMP. val=+0.2 → RAM.
     -- Target: NORM=30%, OFF=60%, DUMP=5%, RAM=5%
-    -- 20 entries: 6x stay(30%), 12x OFF=-0.1(60%), 1x DUMP=+0.1(5%), 1x RAM=+0.2(5%)
     { dev=13, cmd=3001, vals={0, 0, 0, 0, 0, 0, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, 0.1, 0.2},  label="AIR SOURCE Knob" },
 
     -- =========================================================================
@@ -225,7 +225,7 @@ CR.register("F-16C_50", {
     -- Positions: OFF(arg=-1), STBY(arg=0), RDR ALT(arg=+1)
     -- Cold start: STBY (arg=0). val=-1 → OFF (dominant). val=0 → stay STBY.
     -- OFF=-1 (chance: 90%) / STBY=stay (chance: 10%) / RDR ALT not used
-    { dev=15, cmd=3001, vals={-1, -1, -1, -1, -1, -1, -1, -1, -1, 0},                   label="RDR ALT Switch" },
+    { dev=15, cmd=3001, vals={-1, -1, -1, -1, -1, -1, -1, -1, -1, 0},              label="RDR ALT Switch" },
 
     -- =========================================================================
     -- UFC   dev=17  (UFC)
@@ -349,48 +349,31 @@ CR.register("F-16C_50", {
     -- =========================================================================
 
     -- RWR Source Switch | default_2_position_tumb_small | arg 375 | arg_lim={0,1}
-    -- Cold start: OFF (arg=0). val=0 → stay OFF (dominant). val=+1 → ON.
-    -- OFF=stay (chance: 90%) / ON=+1 (chance: 10%)
     { dev=32, cmd=3001, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                        label="RWR Source Switch" },
 
     -- Jammer Source Switch | default_2_position_tumb_small | arg 374 | arg_lim={0,1}
-    -- Cold start: OFF (arg=0). val=0 → stay OFF (dominant). val=+1 → ON.
-    -- OFF=stay (chance: 90%) / ON=+1 (chance: 10%)
     { dev=32, cmd=3002, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                        label="Jammer Source Switch" },
 
     -- MWS Source Switch | default_2_position_tumb_small | arg 373 | arg_lim={0,1}
-    -- Cold start: OFF (arg=0). val=0 → stay OFF (dominant). val=+1 → ON.
-    -- OFF=stay (chance: 90%) / ON=+1 (chance: 10%)
     { dev=32, cmd=3003, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                        label="MWS Source Switch" },
 
     -- O1 Expendable Category Switch | default_2_position_tumb_small | arg 365 | arg_lim={0,1}
-    -- Cold start: OFF (arg=0). val=0 → stay OFF (dominant). val=+1 → ON.
-    -- OFF=stay (chance: 90%) / ON=+1 (chance: 10%)
     { dev=32, cmd=3005, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                        label="O1 Expendable Category Switch" },
 
     -- O2 Expendable Category Switch | default_2_position_tumb_small | arg 366 | arg_lim={0,1}
-    -- Cold start: OFF (arg=0). val=0 → stay OFF (dominant). val=+1 → ON.
-    -- OFF=stay (chance: 90%) / ON=+1 (chance: 10%)
     { dev=32, cmd=3006, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                        label="O2 Expendable Category Switch" },
 
     -- CH Expendable Category Switch | default_2_position_tumb_small | arg 367 | arg_lim={0,1}
-    -- Cold start: OFF (arg=0). val=0 → stay OFF (dominant). val=+1 → ON.
-    -- OFF=stay (chance: 90%) / ON=+1 (chance: 10%)
     { dev=32, cmd=3007, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                        label="CH Expendable Category Switch" },
 
     -- FL Expendable Category Switch | default_2_position_tumb_small | arg 368 | arg_lim={0,1}
-    -- Cold start: OFF (arg=0). val=0 → stay OFF (dominant). val=+1 → ON.
-    -- OFF=stay (chance: 90%) / ON=+1 (chance: 10%)
     { dev=32, cmd=3008, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                        label="FL Expendable Category Switch" },
 
     -- PROGRAM Knob | multiposition_switch, count=5, delta=0.1 | arg 377 | arg_lim={0,0.4}
-    -- Exempt: no fixed operationally default position (mission-dependent), uniform sampling
     { dev=32, cmd=3009, vals={0, 0.1, 0.2, 0.3, 0.4},                              label="PROGRAM Knob" },
 
     -- MODE Knob | multiposition_switch, count=6, delta=0.1 | arg 378 | arg_lim={0,0.5}
-    -- Cold start: STBY (arg=0.1). val=0 → stay STBY.
-    -- val=-0.1 → OFF. val=+0.1 → MAN. val=+0.2 → SEMI. val=+0.3 → AUTO. val=+0.4 → BYP.
-    -- STBY=stay (chance: 90%) / OFF=-0.1 (chance: 5%) / others ~1–2% each
+    -- Cold start: STBY (arg=0.1). STBY=stay (90%) / OFF=-0.1 (5%) / others ~1–2% each
     { dev=32, cmd=3010, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.1, -0.1, 0.1, 0.2, 0.3, 0.4},  label="MODE Knob" },
 
     -- =========================================================================
@@ -401,28 +384,21 @@ CR.register("F-16C_50", {
     -- =========================================================================
 
     -- IFF MASTER Knob | multiposition_switch, count=5, delta=0.1 | arg 539 | arg_lim={0,0.4}
-    -- Cold start: STBY (arg=0.1). val=0 → stay STBY.
-    -- val=-0.1 → OFF. val=+0.1 → LOW. val=+0.2 → NORM. val=+0.3 → EMER.
-    -- STBY=stay (chance: 90%) / OFF=-0.1 (chance: 5%) / others ~2% each
+    -- Cold start: STBY (arg=0.1). STBY=stay (90%) / OFF=-0.1 (5%) / others ~2% each
     { dev=35, cmd=3002, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.1, -0.1, 0.1, 0.1, 0.2, 0.3},  label="IFF Master Knob" },
 
     -- C & I Knob | multiposition_switch, count=2, delta=1 | arg 542 | arg_lim={0,1}
-    -- Cold start: UFC (arg=0). val=0 → stay UFC. val=+1 → BACKUP.
-    -- UFC=stay (chance: 90%) / BACKUP=+1 (chance: 10%)
+    -- Cold start: UFC (arg=0). UFC=stay (90%) / BACKUP=+1 (10%)
     { dev=35, cmd=3001, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                       label="C & I Knob" },
 
     -- =========================================================================
     -- INTERCOM   dev=39  (INTERCOM)
-    -- intercom_commands counter (start=3000):
-    --   COM1_PowerKnob=3001, COM1_ModeKnob=3002, COM2_PowerKnob=3003, ...
     -- =========================================================================
 
-    -- COMM 1 Power Knob | default_axis_limited | arg 430
-    -- Exempt: continuous volume knob, no fixed default position
+    -- COMM 1 Power Knob | default_axis_limited | arg 430 — Exempt
     { dev=39, cmd=3001, vals={0, 0.25, 0.5, 0.75, 1.0},                            label="COMM 1 Power Knob" },
 
-    -- COMM 2 Power Knob | default_axis_limited | arg 431
-    -- Exempt: continuous volume knob, no fixed default position
+    -- COMM 2 Power Knob | default_axis_limited | arg 431 — Exempt
     { dev=39, cmd=3003, vals={0, 0.25, 0.5, 0.75, 1.0},                            label="COMM 2 Power Knob" },
 
     -- =========================================================================
@@ -431,39 +407,78 @@ CR.register("F-16C_50", {
     -- =========================================================================
 
     -- MIDS LVT Knob | multiposition_switch, count=3, delta=0.1 | arg 723 | arg_lim={0,0.2}
-    -- Cold start: OFF (arg=0.1). val=0 → stay OFF.
-    -- val=-0.1 → ZERO. val=+0.1 → ON.
-    -- OFF=stay (chance: 90%) / ZERO=-0.1 (chance: 5%) / ON=+0.1 (chance: 5%)
+    -- Cold start: OFF (arg=0.1). OFF=stay (90%) / ZERO=-0.1 (5%) / ON=+0.1 (5%)
     { dev=41, cmd=3001, vals={0, 0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, -0.1, 0.1},  label="MIDS LVT Knob" },
 
     -- =========================================================================
     -- GPS   dev=59  (GPS)
-    -- gps_commands counter (start=3000): PwrSw=3001
     -- =========================================================================
 
-    -- GPS Switch | default_2_position_tumb | arg 720 | arg_lim={0,1}
-    -- Cold start: ON (arg=0). val=0 → stay ON. val=+1 → OFF.
-    -- ON=stay (chance: 85%) / OFF=+1 (chance: 15%)
+    -- GPS Switch | default_2_position_tumb | arg 720 | cold=ON. ON=stay (85%) / OFF=+1 (15%)
     { dev=59, cmd=3001, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},  label="GPS Switch" },
 
     -- =========================================================================
     -- IDM   dev=60  (IDM)
-    -- idm_commands counter (start=3000): PwrSw=3001
     -- =========================================================================
 
-    -- DL Switch | default_2_position_tumb | arg 721 | arg_lim={0,1}
-    -- Cold start: ON (arg=0). val=0 → stay ON. val=+1 → OFF.
-    -- ON=stay (chance: 85%) / OFF=+1 (chance: 15%)
+    -- DL Switch | default_2_position_tumb | arg 721 | cold=ON. ON=stay (85%) / OFF=+1 (15%)
     { dev=60, cmd=3001, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},  label="DL Switch" },
+
+    -- =========================================================================
+    -- EPU SYSTEM   dev=6  (ENGINE_INTERFACE)
+    -- engine_commands counter (start=3000):
+    --   EpuSwCvrOn=3001  arg=527  default_red_cover         CLOSE=0 / OPEN=+1
+    --   EpuSwCvrOff=3002 arg=529  default_red_cover         CLOSE=0 / OPEN=+1
+    --   EpuSw=3003       arg=528  default_3_pos_tumb_small  NORM=0  / ON=+0.5 / OFF=-0.5
+    --
+    -- Reset strategy: delta=-1 drives an open cover (arg=1) to arg=0 (CLOSE).
+    -- If already closed (arg=0), delta=-1 clamps to arg=0 — safe no-op.
+    -- With both covers closed the mechanical interlock prevents switch movement.
+    --
+    -- Scenarios (r = math.random(10)):
+    --   r=1     : ON OPEN,  OFF OPEN,  NORM  (10%)
+    --   r=2     : ON OPEN,  OFF OPEN,  OFF   (10%)
+    --   r=3     : ON CLOSE, OFF OPEN,  NORM  (10%)
+    --   r=4     : ON CLOSE, OFF OPEN,  OFF   (10%)
+    --   r=5     : ON OPEN,  OFF CLOSE, NORM  (10%)
+    --   r=6..10 : ON CLOSE, OFF CLOSE, NORM  (50%)
+    -- =========================================================================
+    {
+        label = "EPU SYSTEM",
+        dev   = 6,
+        run   = function(dev)
+            local r = math.random(10)
+            local function click(cmd, val) dev:performClickableAction(cmd, val) end
+
+            -- Force both covers CLOSED before anything else.
+            click(3001, -1)  -- ON  cover → CLOSE
+            click(3002, -1)  -- OFF cover → CLOSE
+
+            if r == 1 then          -- ON OPEN, OFF OPEN, NORM (10%)
+                click(3001, 1)
+                click(3002, 1)
+            elseif r == 2 then      -- ON OPEN, OFF OPEN, OFF (10%)
+                click(3001, 1)
+                click(3002, 1)
+                click(3003, -0.5)
+            elseif r == 3 then      -- ON CLOSE, OFF OPEN, NORM (10%)
+                click(3002, 1)
+            elseif r == 4 then      -- ON CLOSE, OFF OPEN, OFF (10%)
+                click(3002, 1)
+                click(3003, -0.5)
+            elseif r == 5 then      -- ON OPEN, OFF CLOSE, NORM (10%)
+                click(3001, 1)
+            end
+            -- r=6..10: ON CLOSE, OFF CLOSE, NORM (50%) — covers already forced closed.
+        end
+    },
 
     -- =========================================================================
     -- MAP   dev=61  (MAP)
     -- map_commands counter (start=3000): PwrSw=3001
     -- =========================================================================
 
-    -- MAP Switch | default_2_position_tumb | arg 722 | arg_lim={0,1}
-    -- Cold start: ON (arg=0). val=0 → stay ON. val=+1 → OFF.
-    -- ON=stay (chance: 85%) / OFF=+1 (chance: 15%)
+    -- MAP Switch | default_2_position_tumb | arg 722 | cold=ON. ON=stay (85%) / OFF=+1 (15%)
     { dev=61, cmd=3001, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},  label="MAP Switch" },
 
 }, 3.0)
