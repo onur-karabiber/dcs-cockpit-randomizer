@@ -45,9 +45,10 @@ CR.register("FA-18C_hornet", {
     -- INTERCOM   dev=40 (INTERCOM)
     -- -------------------------------------------------------------------------
 
-    -- TACAN Volume Knob | default_axis_limited, continuous | arg ~
+    -- TACAN Volume Knob | default_axis_limited, continuous | arg 363
+    -- intercom_commands.TCN_Volume = 3008 (3032 is TCN_Volume_AXIS, the axis-input channel)
     -- Exempt: continuous volume knob, no fixed default position
-    { dev=40, cmd=3032, vals={0, 0.25, 0.5, 0.75, 1.0},    label="TACAN Volume Knob" },
+    { dev=40, cmd=3008, vals={0, 0.25, 0.5, 0.75, 1.0},    label="TACAN Volume Knob" },
 
     -- -------------------------------------------------------------------------
     -- EXTERIOR LIGHTS   dev=8 (EXT_LIGHTS)
@@ -203,6 +204,18 @@ CR.register("FA-18C_hornet", {
     -- IN=stay (chance: 95%, default) / OPEN=+1 (chance: 5%)
     { dev=3,  cmd=3018, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},  label="CB FCS CHAN 2" },
 
+    -- CB FCS CHAN 3 | default_CB_button | arg 454 | cmd=3021
+    -- REMOVED: does not respond to performClickableAction in this context.
+
+    -- CB FCS CHAN 4 | default_CB_button | arg 455 | cmd=3022
+    -- REMOVED: does not respond to performClickableAction in this context.
+
+    -- CB HOOK | default_CB_button | arg 456 | cmd=3023
+    -- REMOVED: does not respond to performClickableAction in this context.
+
+    -- CB LG | default_CB_button | arg 457 | cmd=3024
+    -- REMOVED: does not respond to performClickableAction in this context.
+
     -- -------------------------------------------------------------------------
     -- COUNTERMEASURES   dev=54 (CMDS)
     -- -------------------------------------------------------------------------
@@ -227,10 +240,13 @@ CR.register("FA-18C_hornet", {
     -- TGP   dev=62 (TGP_INTERFACE)
     -- -------------------------------------------------------------------------
 
+    -- FLIR Switch | default_3_position_tumb | arg 439 | arg_lim={0,1}, arg_value=0.5
+    -- Hint: ON/STBY/OFF. Cold start: OFF (arg=1). val=0 → stay OFF (default). val=-0.5 → STBY. val=-1 → ON (two steps).
+    -- REMOVED: switch does not respond to performClickableAction in this context.
+
     -- LST/NFLR Switch | default_2_position_tumb | arg 442 | arg_lim={0,1}
     -- Hint: ON/OFF. Cold start: OFF (arg=1). val=0 → stay OFF (default). val=-1 → ON.
-    -- OFF=stay (chance: 90%, default) / ON=-1 (chance: 10%)
-    { dev=62, cmd=3003, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, -1},   label="LST/NFLR Switch" },
+    -- REMOVED: switch does not respond to performClickableAction in this context.
 
     -- -------------------------------------------------------------------------
     -- RADAR   dev=42 (RADAR)
@@ -272,5 +288,118 @@ CR.register("FA-18C_hornet", {
     -- Defog Handle | default_axis_limited, continuous | arg ~
     -- Exempt: continuous slider, no fixed default position
     { dev=11, cmd=3016, vals={-1, -0.5, 0, 0.5, 1.0},      label="Defog Handle" },
+
+    -- Suit Temperature Knob | default_axis_limited, continuous | arg 406
+    -- Exempt: continuous rotary, no fixed default position
+    { dev=11, cmd=3007, vals={0, 0.25, 0.5, 0.75, 1.0},    label="Suit Temperature Knob" },
+
+    -- Cabin Temperature Knob | default_axis_limited, continuous | arg 407
+    -- Exempt: continuous rotary, no fixed default position
+    { dev=11, cmd=3006, vals={0, 0.25, 0.5, 0.75, 1.0},    label="Cabin Temperature Knob" },
+
+    -- -------------------------------------------------------------------------
+    -- HYDRAULIC   dev=4 (HYDRAULIC_INTERFACE)
+    -- -------------------------------------------------------------------------
+
+    -- Hydraulic Isolate Override Switch | default_2_position_tumb | arg 369 | arg_lim={0,1}
+    -- Hint: NORM/ORIDE. Cold start: NORM (arg=0). val=0 → stay NORM (default). val=+1 → ORIDE.
+    -- NORM=stay (chance: 90%, default) / ORIDE=+1 (chance: 10%)
+    { dev=4,  cmd=3001, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},    label="Hydraulic Isolate Override Switch" },
+
+    -- -------------------------------------------------------------------------
+    -- FUEL   dev=6 (FUEL_INTERFACE)
+    -- -------------------------------------------------------------------------
+
+    -- External Wing Tanks Fuel Control Switch | default_3_position_tumb | arg 342 | arg_lim={-1,1}
+    -- Hint: STOP/NORM/ORIDE. Cold start: NORM (arg=0, center).
+    -- val=0 → stay NORM (default). val=-1 → STOP. val=+1 → ORIDE.
+    -- NORM=stay (chance: 90%, default) / STOP=-1 (chance: 5%) / ORIDE=+1 (chance: 5%)
+    { dev=6,  cmd=3005, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1},  label="External Wing Tanks Fuel Control Switch" },
+
+    -- External Centerline Tank Fuel Control Switch | default_3_position_tumb | arg 343 | arg_lim={-1,1}
+    -- Hint: STOP/NORM/ORIDE. Cold start: NORM (arg=0, center).
+    -- val=0 → stay NORM (default). val=-1 → STOP. val=+1 → ORIDE.
+    -- NORM=stay (chance: 90%, default) / STOP=-1 (chance: 5%) / ORIDE=+1 (chance: 5%)
+    { dev=6,  cmd=3004, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1},  label="External Centerline Tank Fuel Control Switch" },
+
+    -- -------------------------------------------------------------------------
+    -- INTERCOM (continued)   dev=40 (INTERCOM)
+    -- -------------------------------------------------------------------------
+
+    -- ILS Channel Selector Switch | multiposition_switch, count=20, delta=0.05 | arg 352 | arg_lim={0,0.95}
+    -- 20 positions equally spaced. Each step = delta 0.05. All 20 positions equally probable.
+    -- Randomized via run() to pick a random absolute position (0..19 steps from min).
+    {
+        dev=40, cmd=3017, label="ILS Channel Selector Switch",
+        run=function(device)
+            local step = math.random(0, 19)
+            -- Each click moves +0.05; send enough clicks to reach target from any position.
+            -- Safest: drive to 0 first (send -1.0 as large negative delta to clamp to min),
+            -- then step forward exactly 'step' times.
+            device:performClickableAction(3017, -1.0)   -- clamp to min (arg=0, ch1)
+            for _ = 1, step do
+                device:performClickableAction(3017, 0.05)
+            end
+        end
+    },
+
+    -- ILS UFC/MAN Switch | default_2_position_tumb | arg 353 | arg_lim={0,1}
+    -- Hint: UFC/MAN. Cold start: UFC (arg=0). val=0 → stay UFC (default). val=+1 → MAN.
+    -- UFC=stay (chance: 90%, default) / MAN=+1 (chance: 10%)
+    { dev=40, cmd=3016, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},    label="ILS UFC/MAN Switch" },
+
+    -- IFF Master Switch | default_2_position_tumb | arg 356 | arg_lim={0,1}
+    -- Hint: EMER/NORM. Cold start: NORM (arg=0). val=0 → stay NORM (default). val=+1 → EMER.
+    -- NORM=stay (chance: 90%, default) / EMER=+1 (chance: 10%)
+    { dev=40, cmd=3012, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},    label="IFF Master Switch" },
+
+    -- IFF Mode 4 Switch | default_3_position_tumb | arg 355 | arg_lim={-1,1}
+    -- Hint: DIS/AUD+DIS/OFF. Cold start: center (AUD+DIS, arg=0).
+    -- val=0 → stay center (default). val=-1 → DIS (left). val=+1 → OFF (right).
+    -- CENTER=stay (chance: 90%, default) / DIS=-1 (chance: 5%) / OFF=+1 (chance: 5%)
+    { dev=40, cmd=3013, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1},  label="IFF Mode 4 Switch" },
+
+    -- RWR Volume Control Knob | default_axis_limited, continuous | arg 359
+    -- Exempt: continuous volume knob, no fixed default position
+    { dev=40, cmd=3004, vals={0, 0.25, 0.5, 0.75, 1.0},    label="RWR Volume Control Knob" },
+
+    -- MIDS A Volume Control Knob | default_axis_limited, continuous | arg 362
+    -- Exempt: continuous volume knob, no fixed default position
+    { dev=40, cmd=3006, vals={0, 0.25, 0.5, 0.75, 1.0},    label="MIDS A Volume Control Knob" },
+
+    -- MIDS B Volume Control Knob | default_axis_limited, continuous | arg 361
+    -- Exempt: continuous volume knob, no fixed default position
+    { dev=40, cmd=3007, vals={0, 0.25, 0.5, 0.75, 1.0},    label="MIDS B Volume Control Knob" },
+
+    -- ICS Volume Control Knob | default_axis_limited, continuous | arg 358
+    -- Exempt: continuous volume knob, no fixed default position
+    { dev=40, cmd=3003, vals={0, 0.25, 0.5, 0.75, 1.0},    label="ICS Volume Control Knob" },
+
+    -- VOX Volume Control Knob | default_axis_limited, continuous | arg 357
+    -- Exempt: continuous volume knob, no fixed default position
+    { dev=40, cmd=3002, vals={0, 0.25, 0.5, 0.75, 1.0},    label="VOX Volume Control Knob" },
+
+    -- AUX Volume Control Knob | default_axis_limited, continuous | arg 364
+    -- Exempt: continuous volume knob, no fixed default position
+    { dev=40, cmd=3009, vals={0, 0.25, 0.5, 0.75, 1.0},    label="AUX Volume Control Knob" },
+
+    -- TACAN Volume Knob is already registered above (dev=40, cmd=3008).
+
+    -- -------------------------------------------------------------------------
+    -- CPT MECHANICS   dev=7 (CPT_MECHANICS)
+    -- -------------------------------------------------------------------------
+
+    -- Shoulder Harness Control Handle | default_2_position_tumb | arg 513 | arg_lim={0,1}
+    -- Hint: LOCK/UNLOCK. No fixed cold-start default; treat as continuous.
+    -- Exempt from default bias: uniform random sampling across {-1, 0, 1}.
+    { dev=7,  cmd=3009, vals={-1, 0, 1},                    label="Shoulder Harness Control Handle" },
+
+    -- -------------------------------------------------------------------------
+    -- FLIGHT CONTROLS (continued)   dev=2 (CONTROL_INTERFACE)
+    -- -------------------------------------------------------------------------
+
+    -- Throttles Friction Adjusting Lever | default_movable_axis, continuous | arg 504
+    -- Exempt: continuous lever, no fixed default position
+    { dev=2,  cmd=3012, vals={-1, -0.5, 0, 0.5, 1.0},      label="Throttles Friction Adjusting Lever" },
 
 }, 3.1)
