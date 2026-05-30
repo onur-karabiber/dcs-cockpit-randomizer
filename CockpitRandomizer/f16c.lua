@@ -130,11 +130,10 @@ CR.register("F-16C_50", {
     -- =========================================================================
 
     -- ANTI-SKID Switch | default_tumb_button | arg 357 | arg_lim TUMB={-1,0} BTN={0,1}
-    -- Cold start: ANTI-SKID (arg=0, upper limit of TUMB range).
-    -- AntiSkidSw=3004 is guarded on-ground; AntiSkidSw_SPEC=3016 bypasses the guard.
-    -- val=0 → stay ANTI-SKID (dominant). val=-1 → PARKING BRAKE.
-    -- ANTI-SKID=stay (chance: 90%) / PARKING BRAKE=-1 (chance: 10%)
-    { dev=7,  cmd=3016, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, -1},                      label="ANTI-SKID Switch" },
+    -- Cold start: PARKING BRAKE (arg=-1, lower bound of TUMB range). TUMB cmd = AntiSkidSw=3004.
+    -- val=+1 → ANTI-SKID (arg=0, dominant). val=0 → stay PARKING BRAKE.
+    -- ANTI-SKID=+1 (chance: 90%) / PARKING BRAKE=stay (chance: 10%)
+    { dev=7,  cmd=3004, vals={1, 1, 1, 1, 1, 1, 1, 1, 1, 0},                       label="ANTI-SKID Switch" },
 
     -- =========================================================================
     -- EXTERIOR LIGHTS   dev=11  (EXTLIGHTS_SYSTEM)
@@ -185,11 +184,11 @@ CR.register("F-16C_50", {
     -- All exempt: continuous brightness knobs, no fixed default position
     -- =========================================================================
 
-    { dev=12, cmd=3001, vals={0, 0.25, 0.5, 0.75, 1.0},  label="PRIMARY CONSOLES BRT Knob" },
-    { dev=12, cmd=3002, vals={0, 0.25, 0.5, 0.75, 1.0},  label="PRIMARY INST PNL Knob" },
-    { dev=12, cmd=3003, vals={0, 0.25, 0.5, 0.75, 1.0},  label="PRIMARY DATA ENTRY DISPLAY BRT Knob" },
-    { dev=12, cmd=3004, vals={0, 0.25, 0.5, 0.75, 1.0},  label="FLOOD CONSOLES BRT Knob" },
-    { dev=12, cmd=3005, vals={0, 0.25, 0.5, 0.75, 1.0},  label="FLOOD INST PNL Knob" },
+    { dev=12, cmd=3003, vals={0, 0.25, 0.5, 0.75, 1.0},  label="PRIMARY CONSOLES BRT Knob" },
+    { dev=12, cmd=3004, vals={0, 0.25, 0.5, 0.75, 1.0},  label="PRIMARY INST PNL Knob" },
+    { dev=12, cmd=3005, vals={0, 0.25, 0.5, 0.75, 1.0},  label="PRIMARY DATA ENTRY DISPLAY BRT Knob" },
+    { dev=12, cmd=3006, vals={0, 0.25, 0.5, 0.75, 1.0},  label="FLOOD CONSOLES BRT Knob" },
+    { dev=12, cmd=3007, vals={0, 0.25, 0.5, 0.75, 1.0},  label="FLOOD INST PNL Knob" },
 
     -- =========================================================================
     -- ECS   dev=13  (ECS_INTERFACE)
