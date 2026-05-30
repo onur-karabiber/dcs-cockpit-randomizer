@@ -107,6 +107,11 @@ CR.register("F-16C_50", {
     -- CLOSE=stay (90%) / OPEN=+1 (10%)
     { dev=4, cmd=3002, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},   label="FUEL MASTER Switch Cover" },
 
+    -- External Fuel Transfer Switch | default_2_position_tumb | arg=159
+    -- fuel_commands: ExtFuelTransferSw=3003  cold=NORM(arg=0) / WING FIRST=+1
+    -- NORM=stay (90%) / WING FIRST=+1 (10%)
+    { dev=4, cmd=3003, vals={1, 1, 1, 1, 1, 1, 1, 1, 0, 1},   label="External Fuel Transfer Switch" },
+
     -- ENGINE FEED Knob | multiposition_switch, count=4, delta=0.1 | arg 556 | arg_lim={0,0.3}
     -- Cold start: NORM (arg=0.1). val=0 → stay NORM.
     -- val=-0.1 → OFF. val=+0.1 → AFT. val=+0.2 → FWD.
@@ -123,6 +128,18 @@ CR.register("F-16C_50", {
     -- Cold start: CLOSE (arg=0). val=0 → stay CLOSE. val=+1 → OPEN.
     -- CLOSE=stay (chance: 90%) / OPEN=+1 (chance: 10%)
     { dev=4,  cmd=3008, vals={0, 0, 0, 0, 0, 0, 0, 0, 0, 1},                       label="AIR REFUELING Switch" },
+
+    -- =========================================================================
+    -- OXYGEN   dev=8  (OXYGEN_INTERFACE)
+    -- oxygen_commands counter (start=3000): SupplyLever=3001
+    -- =========================================================================
+
+    -- Supply Lever | default_3_position_tumb_small | arg=728
+    -- arg_value_=0.5, arg_limit_={0,1} → arg_value={-0.5,+0.5}, arg_lim={0,1}
+    -- Positions: PBG=arg=0 / ON=arg=0.5 (cold) / OFF=arg=1
+    -- delta=-0.5 → PBG, delta=0 → stay ON, delta=+0.5 → OFF
+    -- ON=stay (80%) / OFF=+0.5 (20%) / PBG: never
+    { dev=8, cmd=3001, vals={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0, 0, 0.5, 0.5},   label="Supply Lever" },
 
     -- =========================================================================
     -- GEAR / BRAKES   dev=7  (GEAR_INTERFACE)
